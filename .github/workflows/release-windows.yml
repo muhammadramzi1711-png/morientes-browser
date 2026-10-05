@@ -52,6 +52,8 @@ jobs:
         run: |
           $version = "0.2.$env:GITHUB_RUN_NUMBER"
           "MORIENTES_VERSION=$version" >> $env:GITHUB_ENV
+          dotnet restore MorientesBrowser/MorientesBrowser.csproj --force-evaluate
+          if ($LASTEXITCODE -ne 0) { throw 'Dependency lock regeneration failed' }
           dotnet restore MorientesBrowser/MorientesBrowser.csproj --locked-mode
           if ($LASTEXITCODE -ne 0) { throw 'Locked restore failed' }
           dotnet build MorientesBrowser/MorientesBrowser.csproj -c Release --no-restore "-p:Version=$version" "-p:InformationalVersion=$version"
@@ -66,6 +68,12 @@ jobs:
           foreach ($name in @('MorientesBrowser.exe', 'Velopack.dll', 'Newtonsoft.Json.dll', 'WebView2Loader.dll', 'ui/chrome.html', 'ui/home/home.html')) {
             if (!(Test-Path "artifacts/publish/$name")) { throw "Missing application file: $name" }
           }
+      - name: Save generated dependency lock
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-dependency-lock
+          path: MorientesBrowser/packages.lock.json
+          retention-days: 7
       - name: Package installer and update feed
         shell: pwsh
         run: |
