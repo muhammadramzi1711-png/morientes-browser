@@ -1,0 +1,82 @@
+name: Build and release Windows
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'MorientesBrowser/**'
+      - 'checks/**'
+      - 'release/**'
+      - '.github/workflows/release-windows.yml'
+      - 'package*.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: windows-release
+  cancel-in-progress: true
+
+jobs:
+  release:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Check input handling and updater behavior
+        shell: pwsh
+        run: |
+          dotnet run --project checks/InputChecks/InputChecks.csproj -c Release
+          if ($LASTEXITCODE -ne 0) { throw 'Input checks failed' }
+          dotnet run --project checks/UpdateChecks/UpdateChecks.csproj -c Release
+          if ($LASTEXITCODE -ne 0) { throw 'Updater checks failed' }
+      - name: Check browser UI
+        shell: pwsh
+        run: |
+          npm ci
+          if ($LASTEXITCODE -ne 0) { throw 'npm ci failed' }
+          npx playwright install chromium
+          if ($LASTEXITCODE -ne 0) { throw 'Browser setup failed' }
+          node checks/ui-checks.cjs
+          if ($LASTEXITCODE -ne 0) { throw 'UI checks failed' }
+      - name: Build Windows application
+        shell: pwsh
+        run: |
+          $version = "0.2.$env:GITHUB_RUN_NUMBER"
+          "MORIENTES_VERSION=$version" >> $env:GITHUB_ENV
+          dotnet restore MorientesBrowser/MorientesBrowser.csproj --locked-mode
+          if ($LASTEXITCODE -ne 0) { throw 'Locked restore failed' }
+          dotnet build MorientesBrowser/MorientesBrowser.csproj -c Release --no-restore "-p:Version=$version" "-p:InformationalVersion=$version"
+          if ($LASTEXITCODE -ne 0) { throw 'Windows build failed' }
+          New-Item -ItemType Directory -Force artifacts/publish | Out-Null
+          Copy-Item MorientesBrowser/bin/Release/net48/* artifacts/publish -Recurse -Force
+          Copy-Item "$env:USERPROFILE/.nuget/packages/microsoft.web.webview2/1.0.4258.31/runtimes/win-x64/native/WebView2Loader.dll" artifacts/publish -Force
+          Copy-Item THIRD-PARTY-NOTICES.md artifacts/publish
+          New-Item -ItemType Directory -Force artifacts/publish/Licenses | Out-Null
+          Copy-Item "$env:USERPROFILE/.nuget/packages/microsoft.web.webview2/1.0.4258.31/LICENSE.txt" artifacts/publish/Licenses
+          Copy-Item "$env:USERPROFILE/.nuget/packages/microsoft.web.webview2/1.0.4258.31/NOTICE.txt" artifacts/publish/Licenses
+          foreach ($name in @('MorientesBrowser.exe', 'Velopack.dll', 'Newtonsoft.Json.dll', 'WebView2Loader.dll', 'ui/chrome.html', 'ui/home/home.html')) {
+            if (!(Test-Path "artifacts/publish/$name")) { throw "Missing application file: $name" }
+          }
+      - name: Package installer and update feed
+        shell: pwsh
+        run: |
+          dotnet tool install --tool-path .tools vpk --version 1.2.161
+          if ($LASTEXITCODE -ne 0) { throw 'Velopack setup failed' }
+          .tools/vpk.exe pack --packId ElMorientes.MorientesBrowser --packTitle 'Morientes Browser' --packAuthors 'Ramzi Wijaya / El Morientes' --packVersion $env:MORIENTES_VERSION --packDir artifacts/publish --mainExe MorientesBrowser.exe --icon MorientesBrowser/assets/morientes.ico --framework "net48,webview2" --runtime win-x64 --channel win --outputDir Releases --releaseNotes release/NOTES.md
+          if ($LASTEXITCODE -ne 0) { throw 'Installer packaging failed' }
+      - name: Publish verified release
+        shell: pwsh
+        env:
+          GH_RELEASE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          .tools/vpk.exe upload github --repoUrl "https://github.com/$env:GITHUB_REPOSITORY" --token $env:GH_RELEASE_TOKEN --outputDir Releases --channel win --publish --releaseName "Morientes Browser $env:MORIENTES_VERSION" --tag "v$env:MORIENTES_VERSION" --targetCommitish $env:GITHUB_SHA
+          if ($LASTEXITCODE -ne 0) { throw 'Release upload failed' }

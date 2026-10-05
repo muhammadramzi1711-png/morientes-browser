@@ -1,0 +1,7 @@
+{
+  "name": "morientes-browser-checks",
+  "private": true,
+  "version": "0.2.1",
+  "scripts": { "test:ui": "node checks/ui-checks.cjs" },
+  "devDependencies": { "playwright": "1.55.1" }
+}

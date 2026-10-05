@@ -1,0 +1,9 @@
+**/bin/
+**/obj/
+node_modules/
+.tools/
+artifacts/
+Releases/
+deliverables/
+*.user
+*.suo

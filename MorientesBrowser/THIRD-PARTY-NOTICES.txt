@@ -1,0 +1,11 @@
+Morientes Browser uses Microsoft Edge WebView2 SDK and Runtime.
+WebView2 SDK: https://www.nuget.org/packages/Microsoft.Web.WebView2/1.0.4258.31
+Copyright Microsoft Corporation. All rights reserved.
+The SDK's license and notices accompany the application under Licenses.
+The Evergreen Runtime / bootstrapper is governed by Microsoft's terms and
+is installed separately by the user. Runtime updates are managed by Microsoft.
+
+This project is independent of Apple, Safari, Mozilla, and Floorp.
+The application's own source code, styling and compass icon were created for
+this project. Website service names in shortcuts identify the destinations;
+no affiliation is claimed.

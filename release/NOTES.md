@@ -1,0 +1,6 @@
+- Toolbar ala Safari, tab ramping, Favorites, tema terang dan gelap.
+- Zoom default 80% yang dapat diubah di Pengaturan.
+- Pemeriksaan dan unduhan pembaruan otomatis saat browser dibuka serta setiap jam.
+- Pembaruan diterapkan saat browser dibuka kembali, tanpa menghentikan sesi aktif.
+- Tombol Cek pembaruan dan pengaturan unduhan otomatis.
+- Bookmark, riwayat, pengaturan dan profil WebView2 disimpan terpisah dari folder instalasi.
