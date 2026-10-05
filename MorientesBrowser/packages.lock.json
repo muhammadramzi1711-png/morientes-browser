@@ -36,6 +36,7 @@
         "resolved": "13.0.4",
         "contentHash": "bR+v+E/yJ6g7GV2uXw2OrUSjYYfjLkOLC8JD4kCS23msLapnKtdJPBJA75fwHH++ErIffeIqzYITLxAur4KAXA=="
       }
-    }
+    },
+    ".NETFramework,Version=v4.8/win-x64": {}
   }
 }
