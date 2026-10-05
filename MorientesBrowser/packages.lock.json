@@ -6,37 +6,44 @@
         "type": "Direct",
         "requested": "[1.0.3, )",
         "resolved": "1.0.3",
-        "contentHash": "47gxeykGlqOAoyq92edecd2uaASXab64lQJMNAifQSYq7d9T4wmEMwsSk/AT402FSoMiOuHir+QXGGeV2o3BSA==",
+        "contentHash": "vUc9Npcs14QsyOD01tnv/m8sQUnGTGOw1BCmKcv77LBJY7OxhJ+zJF7UD/sCL3lYNFuqmQEVlkfS4Quif6FyYg==",
         "dependencies": {
           "Microsoft.NETFramework.ReferenceAssemblies.net48": "1.0.3"
         }
-      },
-      "Microsoft.NETFramework.ReferenceAssemblies.net48": {
-        "type": "Transitive",
-        "resolved": "1.0.3",
-        "contentHash": "XWKgyeNadNcTQaIVvQB8BrdCNrEar6fo/de1OdQRZ9HFy0jcBSaM8IV5q64ZampsSnC8AlTsACaGZUuoFw41RA=="
       },
       "Microsoft.Web.WebView2": {
         "type": "Direct",
         "requested": "[1.0.4258.31, )",
         "resolved": "1.0.4258.31",
-        "contentHash": "HlGVwvyP/IWiXAU8K57Vmg59khY3DWMOxMnH4AHusFRy0/vDAjKItXUIVNXiXXaq4CLfSZyNUic1wOIlnPLsPQ=="
+        "contentHash": "sHVZ2MQrHT1J3q5/6csn0fIP27rzpTO/RRC+wPQDrZheB7T4t2n+vVbY6SdCKr4WRV9s/gmBM3PPMWWJtoDzMg=="
       },
       "Velopack": {
         "type": "Direct",
-        "resolved": "1.2.161",
-        "contentHash": "8NAw46NKBFk1rU8wQK4zL1h6Ii7XO6XYEkWyKO2hmGfBUjQ3nUiLcWVi5/IqMUqAcqwjKo1FJf2SZQ/rlulWVQ==",
         "requested": "[1.2.161, )",
+        "resolved": "1.2.161",
+        "contentHash": "OpHNacIumnkhaaX3ZlQ/TCR4YPOJvud2/PAOoWb6o+mIrLwIVA275I5wAgt4q/1O2VrJeDwR1qFQyqzG4lUArg==",
         "dependencies": {
           "Newtonsoft.Json": "13.0.4"
         }
       },
+      "Microsoft.NETFramework.ReferenceAssemblies.net48": {
+        "type": "Transitive",
+        "resolved": "1.0.3",
+        "contentHash": "zMk4D+9zyiEWByyQ7oPImPN/Jhpj166Ky0Nlla4eXlNL8hI/BtSJsgR8Inldd4NNpIAH3oh8yym0W2DrhXdSLQ=="
+      },
       "Newtonsoft.Json": {
         "type": "Transitive",
         "resolved": "13.0.4",
-        "contentHash": "bR+v+E/yJ6g7GV2uXw2OrUSjYYfjLkOLC8JD4kCS23msLapnKtdJPBJA75fwHH++ErIffeIqzYITLxAur4KAXA=="
+        "contentHash": "pdgNNMai3zv51W5aq268sujXUyx7SNdE2bj1wZcWjAQrKMFZV260lbqYop1d2GM67JI1huLRwxo9ZqnfF/lC6A=="
       }
     },
-    ".NETFramework,Version=v4.8/win-x64": {}
+    ".NETFramework,Version=v4.8/win-x64": {
+      "Microsoft.Web.WebView2": {
+        "type": "Direct",
+        "requested": "[1.0.4258.31, )",
+        "resolved": "1.0.4258.31",
+        "contentHash": "sHVZ2MQrHT1J3q5/6csn0fIP27rzpTO/RRC+wPQDrZheB7T4t2n+vVbY6SdCKr4WRV9s/gmBM3PPMWWJtoDzMg=="
+      }
+    }
   }
 }
